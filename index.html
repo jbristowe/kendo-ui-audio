@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="//cdn.kendostatic.com/2013.1.514/styles/kendo.common.min.css" rel="stylesheet">
+	<link href="//cdn.kendostatic.com/2013.1.514/styles/kendo.default.min.css" rel="stylesheet">
+	<meta charset=utf-8 />
+</head>
+<body>
+	<h1>Kendo UI Audio Visualisation</h1>
+	<audio id="sound" src="http://www.nyan.cat/music/original.mp3" controls="controls"></audio>
+	<p>
+		<span>Chart:</span>
+		<select id="chartDropDownList">
+			<option value="bar">Bar</option>
+			<option value="column" selected>Column</option>
+			<option value="line">Line</option>
+		</select>
+	</p>
+	<div id="chart"></div>
+	<script src="//code.jquery.com/jquery-2.0.2.js"></script>
+	<script src="//cdn.kendostatic.com/2013.1.514/js/kendo.all.min.js"></script>
+	<script src="main.js"></script>
+	<style scoped>
+		.k-chart {
+			height: 240px;
+			width: 640px;
+		}
+	</style>
+</body>
+</html>
