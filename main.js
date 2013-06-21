@@ -1,19 +1,19 @@
 $(function() {
 
-	const FFTSIZE = 256;
-	const SMOOTHING_TIME = 0.1;
+	"use strict";
 
 	var analyser,
 		audioBuffer,
 		audioElement,
 		$audioElement,
-		audioContext = new (window.AudioContext || window.webkitAudioContext)(),
+		audioContext,
 		audioSource,
 		chart,
 		chartDropDownList,
-		isPlaying,
 		processor,
+		fftSize = 256,
 		frequencyData,
+		smoothingTimeConstant = 0.3,
 		themeDropDownList,
 		timeDomainData,
 		url,
@@ -32,18 +32,21 @@ $(function() {
 				majorGridLines: { visible: false },
 				visible: false
 			},
-			dataSource: {
-				data: new Array(FFTSIZE / 2)
-			},
 			legend: { visible: false },
 			seriesDefaults: {
 				border: { width: 0 },
 				labels: { visible: false },
+				line: {
+					width: 2
+				},
 				markers: { visible: false },
 				overlay: { gradient: null },
 				type: "column"
 			},
-			series: [{ field: "values" }],
+			series: [
+				{ field: "frequencies" },
+				{ field: "timeDomains", type: "line" }
+			],
 			transitions: false,
 			valueAxis: {
 				majorGridLines: { visible: false },
@@ -52,83 +55,41 @@ $(function() {
 			}
 		}).data("kendoChart");
 
+		window.AudioContext = window.AudioContext||window.webkitAudioContext;
+		audioContext = new window.AudioContext;
+
 		$audioElement = $("#sound");
 		audioElement = $audioElement.get(0);
 	},
 
 	initAudio = function() {
-		$audioElement
-			.on("error onabort", function(e) {
-				stop();
-			})
-			.on("play pause", function(e) {
-				switch(e.type) {
-					case "play":
-						play();
-						break;
-					case "pause":
-						pause();
-						break;
-				}
-			});
-
 		audioSource = audioContext.createMediaElementSource(audioElement);
-
 		analyser = audioContext.createAnalyser();
-		analyser.fftSize = FFTSIZE;
-		processor = audioContext.createJavaScriptNode(FFTSIZE, 1, 1);
+		analyser.fftSize = fftSize;
+		analyser.smoothingTimeConstant = smoothingTimeConstant;
 
 		audioSource.connect(analyser);
 		analyser.connect(audioContext.destination);
-		processor.connect(audioContext.destination);
-
-		processor.onaudioprocess = processAudio;
 
 		frequencyData = new Uint8Array(analyser.frequencyBinCount);
 		timeDomainData = new Uint8Array(analyser.frequencyBinCount);
 	},
 
-	play = function() {
-		if (audioElement) audioElement.play();
-		else audioSource.noteOn(0);
+	draw = function() {
+		analyser.getByteFrequencyData(frequencyData);
+		analyser.getByteTimeDomainData(timeDomainData);
 
-		isPlaying = true;
-	},
+		chart.options.series[0].data = Array.apply([], frequencyData);
+		chart.options.series[1].data = Array.apply([], timeDomainData);
 
-	processAudio = function() {
-		if (isPlaying) {
-			analyser.getByteFrequencyData(frequencyData);
-			analyser.getByteTimeDomainData(timeDomainData);
-			chart.dataSource.data(Array.apply([], frequencyData));
-		}
-	},
+		chart.redraw();
 
-	stop = function() {
-		isPlaying = false;
-
-		try { audioSource.noteOff(0); } catch(e) {}
-		try {
-			audioSource.disconnect();
-			processor.disconnect();
-			analyser.disconnect();
-		} catch(e) {}
-		audioContext = null;
-	},
-
-	pause = function() {
-		isPlaying = false;
-
-		if (audioElement) audioElement.pause();
-		else stop();
-	};
+		requestAnimationFrame(draw);
+	}
 
 	$(document).ready(function() {
 		init();
 		initAudio();
-
-		window.AudioContext = (window.AudioContext || window.webkitAudioContext || null);
-		if (!AudioContext) {
-			throw new Error("AudioContext not supported!");
-		}
+		draw();
 	});
 });
