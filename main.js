@@ -1,22 +1,31 @@
-$(function() {
+jQuery(document).ready(function($) {
 
 	"use strict";
 
+	// requestAnim shim layer by Paul Irish
+    if (!window.requestAnimationFrame) {
+		window.requestAnimationFrame = ( function() {
+	 		return window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			window.oRequestAnimationFrame ||
+			window.msRequestAnimationFrame ||
+			function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+				window.setTimeout( callback, 1000 / 60 );
+			};
+		} )();
+	};
+
 	var analyser,
-		audioBuffer,
 		audioElement,
 		$audioElement,
 		audioContext,
 		audioSource,
 		chart,
 		chartDropDownList,
-		processor,
 		fftSize = 256,
 		frequencyData,
 		smoothingTimeConstant = 0.3,
-		themeDropDownList,
 		timeDomainData,
-		url,
 
 	init = function() {
 		chartDropDownList = $("#chartDropDownList").kendoDropDownList({
@@ -55,14 +64,11 @@ $(function() {
 			}
 		}).data("kendoChart");
 
-		window.AudioContext = window.AudioContext||window.webkitAudioContext;
-		audioContext = new window.AudioContext;
+		audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 		$audioElement = $("#sound");
 		audioElement = $audioElement.get(0);
-	},
 
-	initAudio = function() {
 		audioSource = audioContext.createMediaElementSource(audioElement);
 		analyser = audioContext.createAnalyser();
 		analyser.fftSize = fftSize;
@@ -76,6 +82,7 @@ $(function() {
 	},
 
 	draw = function() {
+		window.requestAnimationFrame(draw);
 		analyser.getByteFrequencyData(frequencyData);
 		analyser.getByteTimeDomainData(timeDomainData);
 
@@ -83,13 +90,8 @@ $(function() {
 		chart.options.series[1].data = Array.apply([], timeDomainData);
 
 		chart.redraw();
+	};
 
-		requestAnimationFrame(draw);
-	}
-
-	$(document).ready(function() {
-		init();
-		initAudio();
-		draw();
-	});
+	init();
+	draw();
 });
