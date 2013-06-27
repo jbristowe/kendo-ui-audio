@@ -1,30 +1,95 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Audio Visualisation with Kendo UI DataViz</title>
+    <meta name="description" content="An experiment between HTML5 audio, Web Audio API, and Kendo UI DataViz.">
+    <meta http-equiv="cleartype" content="on">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="//cdn.kendostatic.com/2013.2.626/styles/kendo.common.min.css" rel="stylesheet">
 	<link href="//cdn.kendostatic.com/2013.2.626/styles/kendo.default.min.css" rel="stylesheet">
-	<meta charset=utf-8 />
-</head>
-<body>
-	<h1>Audio Visualisation with Kendo UI DataViz</h1>
-	<audio id="sound" src="http://dl.dropbox.com/u/31703/nyan.mp3" autobuffer controls preload="none" loop></audio>
-	<p>
-		<span>Chart:</span>
-		<select id="chartDropDownList">
-			<option value="bar">Bar</option>
-			<option value="column" selected>Column</option>
-			<option value="line">Line</option>
-		</select>
-	</p>
-	<div id="chart"></div>
-	<script src="//code.jquery.com/jquery-2.0.2.js"></script>
-	<script src="//cdn.kendostatic.com/2013.2.626/js/kendo.all.min.js"></script>
-	<script src="main.js"></script>
-	<style scoped>
-		.k-chart {
-			height: 240px;
-			width: 640px;
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+	<style type="text/css">
+		body {
+			padding-top: 20px;
+			padding-bottom: 40px;
+		}
+
+		.k-sparkline {
+			width: 100%;
+		}
+
+		.jumbotron {
+			margin: 60px 0;
+			text-align: center;
+		}
+
+		.jumbotron h1 {
+			font-size: 72px;
+			line-height: 1;
+		}
+
+		.jumbotron .btn {
+			font-size: 21px;
+			padding: 14px 24px;
+		}
+
+		.chart-wrapper {
+			margin: 0 auto 15px auto;
+			padding: 10px;
+			-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+			-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+			box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+			border: 1px solid rgba(255,255,255,0.2);
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			background: -moz-linear-gradient(top,  rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.07) 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.01)), color-stop(100%,rgba(0,0,0,0.07)));
+			background: -webkit-linear-gradient(top,  rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.07) 100%);
+			background: -o-linear-gradient(top,  rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.07) 100%);
+			background: -ms-linear-gradient(top,  rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.07) 100%);
+			background: linear-gradient(to bottom,  rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.07) 100%);
 		}
 	</style>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron">
+          <h1>Audio Visualisation with Kendo UI DataViz</h1>
+          <p class="lead">An experiment between HTML5 audio, Web Audio API, and Kendo UI DataViz.</p>
+        </div>
+        <hr />
+        <div class="row-fluid">
+            <div class="span12">
+			    <div class="chart-wrapper">
+				    <p><audio id="sound" src="http://dl.dropbox.com/u/31703/nyan.mp3" autobuffer controls preload="none" loop></audio></p>
+                    <p>
+	                    <span>Chart:</span>
+	                    <select id="chartDropDownList">
+		                    <option value="bar">Bar</option>
+		                    <option value="column" selected>Column</option>
+		                    <option value="line">Line</option>
+	                    </select>
+                    </p>
+                    <div id="chart"></div>
+			    </div>
+            </div>
+        </div>
+        <hr />
+        <div class="footer">
+            <p>Charts generated using <a href="http://www.kendoui.com/">Kendo UI</a>. Hacked together by <a href="//twitter.com/JohnBristowe">@JohnBristowe</a>.</p>
+        </div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+	<script src="//cdn.kendostatic.com/2013.2.626/js/kendo.all.min.js"></script>
+    <script>window.kendo || document.write('<script src="js/kendo.all.min.js"><\/script>')</script>
+	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+	<script src="main.js"></script>
 </body>
 </html>
