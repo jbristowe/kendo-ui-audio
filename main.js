@@ -37,6 +37,7 @@ jQuery(document).ready(function($) {
 		});
 
 		chart = $("#chart").kendoChart({
+		    renderAs: "canvas",
 			categoryAxis: {
 				majorGridLines: { visible: false },
 				visible: false
