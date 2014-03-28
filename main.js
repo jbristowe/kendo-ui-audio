@@ -21,17 +21,26 @@ jQuery(document).ready(function($) {
 		audioContext,
 		audioSource,
 		chart,
-		chartDropDownList,
-		fftSize = 256,
+		frequencyChartDropDownList,
+		timeDomainChartDropDownList,
+		fftSize = 512,
 		frequencyData,
 		smoothingTimeConstant = 0.3,
 		timeDomainData,
 
 	init = function() {
-		chartDropDownList = $("#chartDropDownList").kendoDropDownList({
+		frequencyChartDropDownList = $("#frequencyChartDropDownList").kendoDropDownList({
 			select: function(e) {
 				var dataItem = this.dataItem(e.item.index());
 				chart.options.series[0].type = dataItem.value;
+				chart.refresh();
+			}
+		});
+
+		timeDomainChartDropDownList = $("#timeDomainChartDropDownList").kendoDropDownList({
+			select: function(e) {
+				var dataItem = this.dataItem(e.item.index());
+				chart.options.series[1].type = dataItem.value;
 				chart.refresh();
 			}
 		});

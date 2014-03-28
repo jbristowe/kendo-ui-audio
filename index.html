@@ -10,82 +10,53 @@
     <meta name="description" content="An experiment between HTML5 audio, Web Audio API, and Kendo UI DataViz.">
     <meta http-equiv="cleartype" content="on">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="//cdn.kendostatic.com/2013.3.1316/styles/kendo.common.min.css" rel="stylesheet">
-    <link href="//cdn.kendostatic.com/2013.3.1316/styles/kendo.default.min.css" rel="stylesheet">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-	<style type="text/css">
-		body {
-			padding-top: 20px;
-			padding-bottom: 40px;
-		}
-
-		.k-sparkline {
-			width: 100%;
-		}
-
-		.jumbotron {
-			margin: 60px 0;
-			text-align: center;
-		}
-
-		.jumbotron h1 {
-			font-size: 72px;
-			line-height: 1;
-		}
-
-		.jumbotron .btn {
-			font-size: 21px;
-			padding: 14px 24px;
-		}
-
-		.chart-wrapper {
-			margin: 0 auto 15px auto;
-			padding: 10px;
-			-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.5);
-			-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.5);
-			box-shadow: 0 1px 2px rgba(0,0,0,0.5);
-			border: 1px solid rgba(255,255,255,0.2);
-			-moz-border-radius: 3px;
-			-webkit-border-radius: 3px;
-			border-radius: 3px;
-			background: -moz-linear-gradient(top,  rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.07) 100%);
-			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.01)), color-stop(100%,rgba(0,0,0,0.07)));
-			background: -webkit-linear-gradient(top,  rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.07) 100%);
-			background: -o-linear-gradient(top,  rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.07) 100%);
-			background: -ms-linear-gradient(top,  rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.07) 100%);
-			background: linear-gradient(to bottom,  rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.07) 100%);
-		}
-	</style>
+    <link rel="stylesheet" href="//cdn.kendostatic.com/2014.1.318/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="//cdn.kendostatic.com/2014.1.318/styles/kendo.default.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Audio Visualisation with Kendo UI DataViz</h1>
-        <p class="lead">An experiment between HTML5 audio, Web Audio API, and Kendo UI DataViz.</p>
+    	<header>
+	        <h1>Audio Visualisation with Kendo UI DataViz</h1>
+	        <p class="lead">An experiment between HTML5 audio, Web Audio API, and Kendo UI DataViz.</p>
+        </header>
         <hr />
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="container-fluid">
+            <div class="row">
 			    <div class="chart-wrapper">
-				    <p><audio id="sound" src="http://dl.dropbox.com/u/31703/nyan.mp3" autobuffer controls preload="none" loop></audio></p>
-                    <p>
-	                    <span>Chart:</span>
-	                    <select id="chartDropDownList">
-		                    <option value="bar">Bar</option>
-		                    <option value="column" selected>Column</option>
-		                    <option value="line">Line</option>
-	                    </select>
-                    </p>
+				    <p><audio id="sound" src="http://dl.dropbox.com/u/31703/nyan.mp3" autobuffer controls loop></audio></p>
+                    <div class="row">
+                    	<div class="col-xs-6">
+		                    Frequency:
+		                    <select id="frequencyChartDropDownList">
+			                    <option value="area">Area</option>
+			                    <option value="bar">Bar</option>
+			                    <option value="column" selected>Column</option>
+			                    <option value="line">Line</option>
+		                    </select>
+		                    </div>
+	                    <div class="col-xs-6">
+	                    	Time Domain:
+		                    <select id="timeDomainChartDropDownList">
+			                    <option value="area">Area</option>
+			                    <option value="bar">Bar</option>
+			                    <option value="column">Column</option>
+			                    <option value="line" selected>Line</option>
+		                    </select>
+	                    </div>
+                    </div>
                     <div id="chart"></div>
 			    </div>
             </div>
         </div>
         <hr />
-        <div class="footer">
-            <p>Charts generated using <a href="http://www.kendoui.com/">Kendo UI</a>. Hacked together by <a href="//twitter.com/JohnBristowe">@JohnBristowe</a>.</p>
-        </div>
+        <footer>
+            <small>Charts generated using <a href="http://www.kendoui.com/">Kendo UI</a>. Hacked together by <a href="//twitter.com/JohnBristowe">@JohnBristowe</a>.</small>
+        </footer>
     </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="//cdn.kendostatic.com/2013.3.1316/js/kendo.all.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="//cdn.kendostatic.com/2014.1.318/js/kendo.all.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 	<script src="main.js"></script>
 </body>
 </html>
