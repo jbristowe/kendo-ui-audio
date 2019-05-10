@@ -2,34 +2,19 @@ jQuery(document).ready(function($) {
 
 	"use strict";
 
-	// requestAnim shim layer by Paul Irish
-    if (!window.requestAnimationFrame) {
-		window.requestAnimationFrame = ( function() {
-	 		return window.webkitRequestAnimationFrame ||
-			window.mozRequestAnimationFrame ||
-			window.oRequestAnimationFrame ||
-			window.msRequestAnimationFrame ||
-			function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
-				window.setTimeout( callback, 1000 / 60 );
-			};
-		} )();
-	};
-
 	var analyser,
 		audioElement,
 		$audioElement,
 		audioContext,
 		audioSource,
 		chart,
-		frequencyChartDropDownList,
-		timeDomainChartDropDownList,
 		fftSize = 512,
 		frequencyData,
 		smoothingTimeConstant = 0.3,
 		timeDomainData,
 
 	init = function() {
-		frequencyChartDropDownList = $("#frequencyChartDropDownList").kendoDropDownList({
+		$("#frequencyChartDropDownList").kendoDropDownList({
 			select: function(e) {
 				var dataItem = this.dataItem(e.item.index());
 				chart.options.series[0].type = dataItem.value;
@@ -37,7 +22,7 @@ jQuery(document).ready(function($) {
 			}
 		});
 
-		timeDomainChartDropDownList = $("#timeDomainChartDropDownList").kendoDropDownList({
+		$("#timeDomainChartDropDownList").kendoDropDownList({
 			select: function(e) {
 				var dataItem = this.dataItem(e.item.index());
 				chart.options.series[1].type = dataItem.value;
@@ -46,7 +31,7 @@ jQuery(document).ready(function($) {
 		});
 
 		chart = $("#chart").kendoChart({
-		    renderAs: "canvas",
+		  renderAs: "canvas",
 			categoryAxis: {
 				majorGridLines: { visible: false },
 				visible: false
@@ -66,6 +51,7 @@ jQuery(document).ready(function($) {
 				{ field: "frequencies" },
 				{ field: "timeDomains", type: "line" }
 			],
+			theme: "bootstrap",
 			transitions: false,
 			valueAxis: {
 				majorGridLines: { visible: false },
@@ -74,25 +60,29 @@ jQuery(document).ready(function($) {
 			}
 		}).data("kendoChart");
 
-		audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
 		$audioElement = $("#sound");
 		audioElement = $audioElement.get(0);
 
-		audioSource = audioContext.createMediaElementSource(audioElement);
-		analyser = audioContext.createAnalyser();
-		analyser.fftSize = fftSize;
-		analyser.smoothingTimeConstant = smoothingTimeConstant;
+    audioElement.onplay = () => {
+      console.log('hell');
+      audioContext = new window.AudioContext();
+  
+      audioSource = audioContext.createMediaElementSource(audioElement);
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = fftSize;
+      analyser.smoothingTimeConstant = smoothingTimeConstant;
+  
+      audioSource.connect(analyser);
+      analyser.connect(audioContext.destination);
+  
+      frequencyData = new Uint8Array(analyser.frequencyBinCount);
+      timeDomainData = new Uint8Array(analyser.frequencyBinCount);  
 
-		audioSource.connect(analyser);
-		analyser.connect(audioContext.destination);
-
-		frequencyData = new Uint8Array(analyser.frequencyBinCount);
-		timeDomainData = new Uint8Array(analyser.frequencyBinCount);
+      draw();
+    };
 	},
 
 	draw = function() {
-		window.requestAnimationFrame(draw);
 		analyser.getByteFrequencyData(frequencyData);
 		analyser.getByteTimeDomainData(timeDomainData);
 
@@ -100,8 +90,9 @@ jQuery(document).ready(function($) {
 		chart.options.series[1].data = Array.apply([], timeDomainData);
 
 		chart.redraw();
+
+		kendo.animationFrame(draw);
 	};
 
 	init();
-	draw();
 });

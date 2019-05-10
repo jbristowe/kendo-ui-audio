@@ -1,0 +1,16 @@
+{
+  "name": "kendo-ui-audio",
+  "version": "1.0.0",
+  "description": "An experiment between HTML5 audio, Web Audio API, and Kendo UI.",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbristowe/kendo-ui-audio.git"
+  },
+  "author": "John Bristowe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbristowe/kendo-ui-audio/issues"
+  },
+  "homepage": "https://github.com/jbristowe/kendo-ui-audio#readme"
+}
