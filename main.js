@@ -4,7 +4,6 @@ jQuery(document).ready(function($) {
 
 	var analyser,
 		audioElement,
-		$audioElement,
 		audioContext,
 		audioSource,
 		chart,
@@ -60,8 +59,7 @@ jQuery(document).ready(function($) {
 			}
 		}).data("kendoChart");
 
-		$audioElement = $("#sound");
-		audioElement = $audioElement.get(0);
+		audioElement = $("#sound").get(0);
 
     audioElement.onplay = function() {
       if (!audioContext) {
