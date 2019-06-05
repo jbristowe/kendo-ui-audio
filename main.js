@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
 		fftSize = 512,
 		frequencyData,
 		smoothingTimeConstant = 0.3,
-		timeDomainData,
+    timeDomainData,
 
 	init = function() {
 		$("#frequencyChartDropDownList").kendoDropDownList({
@@ -63,35 +63,35 @@ jQuery(document).ready(function($) {
 		$audioElement = $("#sound");
 		audioElement = $audioElement.get(0);
 
-    audioElement.onplay = () => {
-      console.log('hell');
-      audioContext = new window.AudioContext();
+    audioElement.onplay = function() {
+      if (!audioContext) {
+        audioContext = new window.AudioContext();
   
-      audioSource = audioContext.createMediaElementSource(audioElement);
-      analyser = audioContext.createAnalyser();
-      analyser.fftSize = fftSize;
-      analyser.smoothingTimeConstant = smoothingTimeConstant;
+        audioSource = audioContext.createMediaElementSource(audioElement);
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = fftSize;
+        analyser.smoothingTimeConstant = smoothingTimeConstant;
+    
+        audioSource.connect(analyser);
+        analyser.connect(audioContext.destination);
+    
+        frequencyData = new Uint8Array(analyser.frequencyBinCount);
+        timeDomainData = new Uint8Array(analyser.frequencyBinCount);  
   
-      audioSource.connect(analyser);
-      analyser.connect(audioContext.destination);
-  
-      frequencyData = new Uint8Array(analyser.frequencyBinCount);
-      timeDomainData = new Uint8Array(analyser.frequencyBinCount);  
-
-      draw();
+        draw();
+      }
     };
 	},
 
 	draw = function() {
-		analyser.getByteFrequencyData(frequencyData);
-		analyser.getByteTimeDomainData(timeDomainData);
+    analyser.getByteFrequencyData(frequencyData);
+    analyser.getByteTimeDomainData(timeDomainData);
 
-		chart.options.series[0].data = Array.apply([], frequencyData);
-		chart.options.series[1].data = Array.apply([], timeDomainData);
+    chart.options.series[0].data = Array.apply([], frequencyData);
+    chart.options.series[1].data = Array.apply([], timeDomainData);  
+    chart.redraw();  
 
-		chart.redraw();
-
-		kendo.animationFrame(draw);
+    kendo.animationFrame(draw);
 	};
 
 	init();
